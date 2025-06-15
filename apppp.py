@@ -11,9 +11,15 @@ import streamlit as st
 import pandas as pd
 import joblib
 from joblib import load
+import pickle
 
 # Load model dan data
-model = joblib.load("personality_model.joblib")
+@st.cache_resource
+def load_model():
+    return joblib.load("random_forest_personality_model.pkl")
+
+model = load_model()
+
 url = "https://raw.githubusercontent.com/Khoerudin683/proyek-data-mining/main/personality_dataset.csv"
 df = pd.read_csv(url)
 
