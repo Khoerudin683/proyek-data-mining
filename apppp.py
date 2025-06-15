@@ -66,13 +66,13 @@ elif page == "Prediksi":
 
     # Form input data
     with st.form("prediction_form"):
-        alone = st.slider("Time spent alone (0–10)", 0, 10, 5)
-        stage_fear = st.selectbox("Stage fear?", ["Yes", "No"])
-        social_event = st.slider("Social event attendance (0–10)", 0, 10, 5)
-        going_outside = st.slider("Going outside (0–10)", 0, 10, 5)
-        drained = st.selectbox("Drained after socializing?", ["Yes", "No"])
-        friends = st.slider("Friends circle size (0–20)", 0, 20, 10)
-        post_freq = st.slider("Post frequency (0–10)", 0, 10, 5)
+        alone = st.slider("waktu yang dihabiskan sendirian (0–10)", 0, 10, 5)
+        stage_fear = st.selectbox("demam panggung?", ["Yes", "No"])
+        social_event = st.slider("kehadiran acara sosial (0–10)", 0, 10, 5)
+        going_outside = st.slider("pergi ke luar (0–10)", 0, 10, 5)
+        drained = st.selectbox("cape setelah bersosialisasi?", ["Yes", "No"])
+        friends = st.slider("circle pertemanan (0–20)", 0, 20, 10)
+        post_freq = st.slider("frekuensi posting (0–10)", 0, 10, 5)
 
         submit = st.form_submit_button("Prediksi")
 
