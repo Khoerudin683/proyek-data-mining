@@ -122,7 +122,7 @@ elif page == "Prediksi":
 
     # Form input data
     with st.form("prediction_form"):
-        nama : st.text.input("Masukan nama")
+        nama : st.text_input("Masukan nama")
         alone = st.slider("waktu yang dihabiskan sendirian (0–10)", 0, 10, 5)
         stage_fear = st.selectbox("demam panggung?", ["Yes", "No"])
         social_event = st.slider("kehadiran acara sosial (0–10)", 0, 10, 5)
