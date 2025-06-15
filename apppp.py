@@ -122,7 +122,6 @@ elif page == "Prediksi":
 
     # Form input data
     with st.form("prediction_form"):
-        nama : st.text_input("Masukan nama")
         alone = st.slider("waktu yang dihabiskan sendirian (0–10)", 0, 10, 5)
         stage_fear = st.selectbox("demam panggung?", ["Yes", "No"])
         social_event = st.slider("kehadiran acara sosial (0–10)", 0, 10, 5)
@@ -145,7 +144,7 @@ elif page == "Prediksi":
         personality = "Introvert" if pred == 1 else "Extrovert"
 
         st.subheader("Hasil Prediksi")
-        st.markdown(f"🎉 Hai {nama}, kamu diprediksi sebagai **{personality}**!")
+        st.info(f"Model memprediksi kepribadian: **{personality}**")
 
 
 # 4. Halaman Anggota Kelompok
