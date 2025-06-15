@@ -85,7 +85,7 @@ elif page == "Prediksi":
                        drained_bin, friends, post_freq]]
 
         pred = model.predict(input_data)[0]
-        personality = "Extrovert" if pred == 1 else "Introvert"
+        personality = "Introvert" if pred == 1 else "Extrovert"
 
         st.subheader("Hasil Prediksi")
         st.info(f"Model memprediksi kepribadian: **{personality}**")
