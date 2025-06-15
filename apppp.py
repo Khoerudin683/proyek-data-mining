@@ -67,6 +67,13 @@ elif page == "Model":
     
     # Load model dan data
     model = joblib.load("xgboost_personality_model.joblib")
+    X = X.apply(pd.to_numeric, errors='coerce')
+    
+    # Cek apakah ada NaN setelah konversi (karena gagal parsing)
+    if X.isnull().values.any():
+        st.error("Ada nilai tidak numerik di fitur. Pastikan semua data sudah di-encode.")
+        st.write(X.dtypes)
+
     
     # Pisah fitur dan label
     X = df.drop("Personality", axis=1)
@@ -86,6 +93,7 @@ elif page == "Model":
     
     # Confusion matrix
     cm = confusion_matrix(y_encoded, y_pred)
+    # Pastikan semua kolom numerik
     
     
     st.subheader("🎯 Evaluasi Model")
