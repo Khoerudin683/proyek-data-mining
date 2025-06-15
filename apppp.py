@@ -14,11 +14,8 @@ from joblib import load
 import pickle
 
 # Load model dan data
-@st.cache_resource
-def load_model():
-    return joblib.load("random_forest_personality_model.pkl")
 
-model = load_model()
+model = load_model("xgboost_personality_model.joblib")
 
 url = "https://raw.githubusercontent.com/Khoerudin683/proyek-data-mining/main/personality_dataset.csv"
 df = pd.read_csv(url)
