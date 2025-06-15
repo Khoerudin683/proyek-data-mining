@@ -94,8 +94,8 @@ elif page == "Prediksi":
 elif page == "Anggota Kelompok":
     st.title("👥 Anggota Kelompok")
     st.write("""
-    1. Nama 1 - NIM
-    2. Nama 2 - NIM
-    3. Nama 3 - NIM
-    4. Nama 4 - NIM
+    1. HANNY WAHYU KHAIRUN     -2304030050
+    2. ALYA SITI FATIMAH       -2304030058 
+    3. ALFIAN NOOR KHOERUDIN   -2304030070
+    4. ARINI SALMAH            -2304030080
     """)
