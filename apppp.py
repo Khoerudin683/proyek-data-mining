@@ -19,6 +19,8 @@ import seaborn as sns
 
 # Load model
 model = joblib.load('xgboost_personality_model.joblib')
+url = "https://raw.githubusercontent.com/Khoerudin683/proyek-data-mining/main/personality_dataset.csv"
+df = pd.read_csv(url)
 
 # Judul halaman
 st.set_page_config(page_title="Prediksi Personality", layout="centered")
