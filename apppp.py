@@ -13,6 +13,9 @@ import joblib
 from joblib import load
 import pickle
 import os
+from sklearn.metrics import classification_report, accuracy_score, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Load model
 model = joblib.load('xgboost_personality_model.joblib')
@@ -58,6 +61,44 @@ elif page == "Model":
     - Friends_circle_size
     - Post_frequency
     """)
+
+    
+    # Load model dan data
+    model = joblib.load("xgboost_personality_model.joblib")
+    
+    # Pisah fitur dan label
+    X = df.drop("Personality", axis=1)
+    y = df["Personality"]
+    
+    # Encode label
+    from sklearn.preprocessing import LabelEncoder
+    le = LabelEncoder()
+    y_encoded = le.fit_transform(y)
+    
+    # Prediksi
+    y_pred = model.predict(X)
+    
+    # Akurasi
+    acc = accuracy_score(y_encoded, y_pred)
+    report = classification_report(y_encoded, y_pred, target_names=le.classes_)
+    
+    # Confusion matrix
+    cm = confusion_matrix(y_encoded, y_pred)
+    
+    
+    st.subheader("🎯 Evaluasi Model")
+    st.write(f"**Akurasi Model:** {acc:.4f}")
+    st.text("Classification Report:")
+    st.code(report)
+    
+    # Plot Confusion Matrix
+    fig, ax = plt.subplots()
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=le.classes_, yticklabels=le.classes_, ax=ax)
+    plt.xlabel("Prediksi")
+    plt.ylabel("Aktual")
+    plt.title("Confusion Matrix")
+    st.pyplot(fig)
+
     st.success("Model berhasil dimuat dan siap digunakan untuk prediksi.")
 
 # 3. Halaman Prediksi
