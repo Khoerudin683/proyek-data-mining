@@ -99,7 +99,3 @@ elif page == "Anggota Kelompok":
     3. Nama 3 - NIM
     4. Nama 4 - NIM
     """)
-
-
-    *(Silakan ganti dengan nama asli kelompokmu.)*
-    """)
