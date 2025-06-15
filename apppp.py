@@ -12,24 +12,44 @@ import pandas as pd
 import joblib
 from joblib import load
 import pickle
+import os
 
-# Load model dan data
+# Load model
+model = joblib.load('xgboost_personality_model.joblib')
 
-model = load("xgboost_personality_model.joblib")
+# Judul halaman
+st.set_page_config(page_title="Prediksi Personality", layout="centered")
 
-url = "https://raw.githubusercontent.com/Khoerudin683/proyek-data-mining/main/personality_dataset.csv"
-df = pd.read_csv(url)
-
-# Navigasi antar halaman
+# Sidebar untuk navigasi
 page = st.sidebar.selectbox("Navigasi", ["Pendahuluan", "Model", "Prediksi", "Anggota Kelompok"])
 
-# ---------------- Halaman 1: Pendahuluan ----------------
+# 1. Halaman Pendahuluan
 if page == "Pendahuluan":
-    st.title("📊 Prediksi Kepribadian Berdasarkan Perilaku Sosial")
+    st.title("📊 Pendahuluan")
     st.write("""
-    Dataset ini berisi 5.000 data yang mencerminkan kebiasaan sosial seseorang dan diklasifikasikan sebagai **Introvert** atau **Extrovert**.
+    Dataset ini berisi data kepribadian yang digunakan untuk mengklasifikasikan seseorang sebagai *Introvert* atau *Extrovert* berdasarkan beberapa fitur sosial seperti:
+    
+    - Waktu sendirian
+    - Kehadiran di acara sosial
+    - Ukuran lingkaran pertemanan
+    - Frekuensi posting
+    - Perasaan lelah setelah bersosialisasi
+    - Rasa takut tampil
+    
+    Dataset terdiri dari 5000 data dan telah digunakan untuk melatih model XGBoost.
+    """)
+    
+    # Tampilkan sampel data
+    df = pd.read_csv("personality_dataset.csv")
+    st.dataframe(df.head())
 
-    **Fitur-fitur:**
+# 2. Halaman Model
+elif page == "Model":
+    st.title("🧠 Model Machine Learning")
+    st.write("""
+    Model yang digunakan adalah **XGBoost Classifier**, dilatih dengan akurasi lebih dari **99%**.
+
+    Model dilatih pada fitur:
     - Time_spent_Alone
     - Stage_fear
     - Social_event_attendance
@@ -37,62 +57,49 @@ if page == "Pendahuluan":
     - Drained_after_socializing
     - Friends_circle_size
     - Post_frequency
-
-    **Target:** Personality (Introvert/Extrovert)
     """)
-    st.subheader("Cuplikan Dataset")
-    st.dataframe(df.head())
+    st.success("Model berhasil dimuat dan siap digunakan untuk prediksi.")
 
-# ---------------- Halaman 2: Model ----------------
-elif page == "Model":
-    st.title("📈 Model Machine Learning")
-    st.write("""
-    Model yang digunakan adalah **Random Forest Classifier**. Model ini dilatih menggunakan data yang sudah diproses (encoding + scaling).
-
-    Hasil evaluasi:
-    - Akurasi: 99.7%
-    - Sangat akurat dalam membedakan kepribadian introvert dan extrovert.
-    """)
-    st.image("https://upload.wikimedia.org/wikipedia/commons/7/76/Random_forest_diagram_complete.png", width=500)
-
-# ---------------- Halaman 3: Prediksi ----------------
+# 3. Halaman Prediksi
 elif page == "Prediksi":
-    st.title("🧪 Prediksi Kepribadian")
+    st.title("🔮 Prediksi Kepribadian")
 
-    st.write("Masukkan data di bawah ini untuk memprediksi apakah seseorang **Introvert** atau **Extrovert**.")
+    # Form input data
+    with st.form("prediction_form"):
+        alone = st.slider("Time spent alone (0–10)", 0, 10, 5)
+        stage_fear = st.selectbox("Stage fear?", ["Yes", "No"])
+        social_event = st.slider("Social event attendance (0–10)", 0, 10, 5)
+        going_outside = st.slider("Going outside (0–10)", 0, 10, 5)
+        drained = st.selectbox("Drained after socializing?", ["Yes", "No"])
+        friends = st.slider("Friends circle size (0–20)", 0, 20, 10)
+        post_freq = st.slider("Post frequency (0–10)", 0, 10, 5)
 
-    # Form input pengguna
-    time_alone = st.slider("Time Spent Alone", 0, 10, 5)
-    stage_fear = st.selectbox("Stage Fear", ["Yes", "No"])
-    event_attend = st.slider("Social Event Attendance", 0, 10, 5)
-    going_out = st.slider("Going Outside", 0, 10, 5)
-    drained_social = st.selectbox("Drained After Socializing", ["Yes", "No"])
-    friends_size = st.slider("Friends Circle Size", 0, 20, 10)
-    post_freq = st.slider("Post Frequency", 0, 10, 5)
+        submit = st.form_submit_button("Prediksi")
 
-    # Prediksi
-    if st.button("Prediksi Personality"):
-        input_df = pd.DataFrame([{
-            "Time_spent_Alone": time_alone,
-            "Stage_fear": stage_fear,
-            "Social_event_attendance": event_attend,
-            "Going_outside": going_out,
-            "Drained_after_socializing": drained_social,
-            "Friends_circle_size": friends_size,
-            "Post_frequency": post_freq
-        }])
+    if submit:
+        # Konversi kategori ke angka sesuai training
+        stage_fear_bin = 1 if stage_fear == "Yes" else 0
+        drained_bin = 1 if drained == "Yes" else 0
 
-        prediction = model.predict(input_df)[0]
-        st.success(f"Prediksi: **{prediction}**")
+        input_data = [[alone, stage_fear_bin, social_event, going_outside,
+                       drained_bin, friends, post_freq]]
 
-# ---------------- Halaman 4: Anggota Kelompok ----------------
+        pred = model.predict(input_data)[0]
+        personality = "Extrovert" if pred == 1 else "Introvert"
+
+        st.subheader("Hasil Prediksi")
+        st.info(f"Model memprediksi kepribadian: **{personality}**")
+
+# 4. Halaman Anggota Kelompok
 elif page == "Anggota Kelompok":
     st.title("👥 Anggota Kelompok")
     st.write("""
-    - Nama 1 (NIM)
-    - Nama 2 (NIM)
-    - Nama 3 (NIM)
-    - Nama 4 (NIM)
+    1. Nama 1 - NIM
+    2. Nama 2 - NIM
+    3. Nama 3 - NIM
+    4. Nama 4 - NIM
+    """)
+
 
     *(Silakan ganti dengan nama asli kelompokmu.)*
     """)
