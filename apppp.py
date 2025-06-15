@@ -15,7 +15,7 @@ import pickle
 
 # Load model dan data
 
-model = load_model("xgboost_personality_model.joblib")
+model = load("xgboost_personality_model.joblib")
 
 url = "https://raw.githubusercontent.com/Khoerudin683/proyek-data-mining/main/personality_dataset.csv"
 df = pd.read_csv(url)
