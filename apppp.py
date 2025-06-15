@@ -145,7 +145,7 @@ elif page == "Prediksi":
         personality = "Introvert" if pred == 1 else "Extrovert"
 
         st.subheader("Hasil Prediksi")
-        st.success(f"🎉 Hai {nama}, kamu diprediksi sebagai **{personality}**!")
+        st.info(f"🎉 Hai {nama}, kamu diprediksi sebagai **{personality}**!")
 
 
 # 4. Halaman Anggota Kelompok
