@@ -64,6 +64,56 @@ elif page == "Model":
     - Post_frequency
     """)
 
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+    from sklearn.preprocessing import LabelEncoder
+    
+    st.title("📊 Evaluasi Model Kepribadian")
+    
+    # Load dataset dan model
+    df = pd.read_csv("personality_dataset.csv")
+    model = joblib.load("xgboost_personality_model.joblib")
+    
+    # Pisahkan fitur dan label
+    X = df.drop("Personality", axis=1)
+    y = df["Personality"]
+    
+    # Pastikan semua fitur numerik
+    X = X.copy()
+    for col in X.columns:
+        if X[col].dtype == "object":
+            X[col] = X[col].map({"Yes": 1, "No": 0})  # Bisa disesuaikan jika ada kolom lain
+    
+    # Encode label
+    le = LabelEncoder()
+    y_encoded = le.fit_transform(y)
+    
+    # Prediksi
+    y_pred = model.predict(X)
+    
+    # Evaluasi
+    acc = accuracy_score(y_encoded, y_pred)
+    report = classification_report(y_encoded, y_pred, target_names=le.classes_)
+    cm = confusion_matrix(y_encoded, y_pred)
+    
+    # Tampilkan hasil
+    st.subheader("🎯 Akurasi Model")
+    st.success(f"Akurasi: {acc:.4f}")
+    
+    st.subheader("📄 Classification Report")
+    st.code(report)
+    
+    # Confusion matrix visual
+    st.subheader("🔍 Confusion Matrix")
+    fig, ax = plt.subplots()
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=le.classes_, yticklabels=le.classes_, ax=ax)
+    plt.xlabel("Prediksi")
+    plt.ylabel("Aktual")
+    plt.title("Confusion Matrix")
+    st.pyplot(fig)
+
+
     st.success("Model berhasil dimuat dan siap digunakan untuk prediksi.")
 
 # 3. Halaman Prediksi
