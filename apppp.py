@@ -99,7 +99,7 @@ elif page == "Model":
     
     # Tampilkan hasil
     st.subheader("🎯 Akurasi Model")
-    st.success(f"Akurasi: {acc:.4f}")
+    st.success(f"Akurasi: {acc:.4f}*100%")
     
     st.subheader("📄 Classification Report")
     st.code(report)
