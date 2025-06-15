@@ -13,7 +13,7 @@ import joblib
 from joblib import load
 
 # Load model dan data
-#model = joblib.load("personality_model.joblib")
+model = joblib.load("personality_model.joblib")
 url = "https://raw.githubusercontent.com/Khoerudin683/proyek-data-mining/main/personality_dataset.csv"
 df = pd.read_csv(url)
 
